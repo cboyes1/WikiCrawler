@@ -55,5 +55,4 @@ while START_YEAR <= 2019:
 
 with open(os.path.join(HERE, 'song_titles.txt'), 'w', encoding="utf-8") as file:
     for string in SONG_LIST:
-        if not string.isdigit():
-            file.write(string + "\n")
+        file.write(string + "\n")
