@@ -67,5 +67,7 @@ with open(os.path.join(HERE, 'song_titles.txt'), "w", encoding="utf-8") as file:
             pass
         elif line.strip("\n") in ["Position", "Song", "Artist"]:
             pass
+        elif line.strip("\n").isdigit():
+            pass
         else:
             file.write(line)
