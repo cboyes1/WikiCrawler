@@ -21,6 +21,7 @@ SONG_LIST = []
 START_YEAR = 1946
 
 while START_YEAR <= 2019:
+    SONG_LIST.append("The Year Is: " + str(START_YEAR))
     if START_YEAR <= 1948:
         URL_ID = "https://en.wikipedia.org/wiki/Billboard_year-end_top_singles_of_"
     if 1949 <= START_YEAR <= 1955:
@@ -34,25 +35,37 @@ while START_YEAR <= 2019:
     SOUP = BeautifulSoup(SOURCE, 'lxml')
     HTML_TEXT = SOUP.find_all('td')
 
-    SONG_LIST.append("Billboards Top Selling Songs For The Year: " + str(START_YEAR))
+    # SONG_LIST.append("Billboards Top Selling Songs For The Year: " + str(START_YEAR))
     print("Current Year = " + str(START_YEAR))
 
     COUNTER = 0
-    for td in SOUP.find_all("td"):
+    for td in SOUP.findAll("table", {"class": "wikitable sortable"}):
         line = td.text
         if len(line) >= 1:
-            if not line[0].isdigit() and line[0] == "\"":
+            if not line.isdigit() and line[0] == "\"":
                 COUNTER += 1
-                SONG_LIST.append(str(COUNTER) + ": " + line)
-            elif not line[0].isdigit():
-                SONG_LIST.append("    " + line)
-    for i in range(2):
-        SONG_LIST.append("")
-    time.sleep(random.randint(3, 7))
+                SONG_LIST.append(line)
+            elif not line.isdigit():
+                COUNTER += 1
+                SONG_LIST.append(line)
+
+    time.sleep(3)
     START_YEAR += 1
 
 
 
 with open(os.path.join(HERE, 'song_titles.txt'), 'w', encoding="utf-8") as file:
     for string in SONG_LIST:
-        file.write(string + "\n")
+        file.write(string)
+
+with open(os.path.join(HERE, 'song_titles.txt'), 'r', encoding="utf-8") as file:
+    LINES = file.readlines()
+
+with open(os.path.join(HERE, 'song_titles.txt'), "w", encoding="utf-8") as file:
+    for line in LINES:
+        if line in ['\n', '\r\n']:
+            pass
+        elif line.strip("\n") in ["Position", "Song", "Artist"]:
+            pass
+        else:
+            file.write(line)
